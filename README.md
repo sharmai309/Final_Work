@@ -6,7 +6,9 @@ Isha Sharma · Khadija Shuaib · Kristian Velazquez
 A 3-stage pipeline for predicting transition state (TS) geometries from reactant and product structures, using an E(n)-Equivariant Graph Neural Network (EGNN) combined with flow matching — implemented in PyTorch.
 
 #### Key Results at a Glance
-MetricValueTest Set RMSD (EGNN v5)0.3565 — beats midpoint baseline 0.3566 ✅100-sample RMSD snapshot0.299 — beats baseline 0.349 by 14% ✅Best Validation Loss0.1247 (EGNN + Flow combined)Reactions improved vs midpoint49% per-sampleModel parameters62,746Training reactions7,700Pipeline stages3
+MetricValueTest Set RMSD (EGNN v5)0.3565 — beats midpoint baseline 0.3566 
+✅100-sample RMSD snapshot0.299 — beats baseline 0.349 by 14% 
+✅Best Validation Loss0.1247 (EGNN + Flow combined)Reactions improved vs midpoint49% per-sampleModel parameters62,746Training reactions7,700Pipeline stages3
 
 #### Problem Statement
 The transition state (TS) is the highest-energy saddle point along a reaction pathway — the fleeting atomic configuration reactants must pass through to become products. Locating it is essential for computing activation energies and understanding reaction mechanisms, but traditional quantum methods (DFT, NEB) take hours per molecule.
