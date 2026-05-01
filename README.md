@@ -99,11 +99,10 @@ egnn-flow-reactive-structures/
 └── README.md
 
 ### Installation & Usage
-bashgit clone https://github.com/sharmai309/egnn-flow-reactive-structures.git
+git clone https://github.com/sharmai309/egnn-flow-reactive-structures.git
 cd egnn-flow-reactive-structures
 pip install torch torch-geometric numpy scipy
 python "train_egnn_flow_combined 1.3.py"
-Python 3.8+ and PyTorch 1.12+ recommended.
 
 ### References
 
