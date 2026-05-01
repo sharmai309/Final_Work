@@ -1,25 +1,25 @@
-EGNN + Flow Matching for Transition State Prediction
+### EGNN + Flow Matching for Transition State Prediction
 
-Team 6 · AI Schmidt Hackathon 2026 · Generative Chemistry
+### Team 6 · AI Schmidt Hackathon 2026 · Generative Chemistry
 Isha Sharma · Khadija Shuaib · Kristian Velazquez
 
 A 3-stage pipeline for predicting transition state (TS) geometries from reactant and product structures, using an E(n)-Equivariant Graph Neural Network (EGNN) combined with flow matching — implemented in PyTorch.
 
-Key Results at a Glance
+#### Key Results at a Glance
 MetricValueTest Set RMSD (EGNN v5)0.3565 — beats midpoint baseline 0.3566 ✅100-sample RMSD snapshot0.299 — beats baseline 0.349 by 14% ✅Best Validation Loss0.1247 (EGNN + Flow combined)Reactions improved vs midpoint49% per-sampleModel parameters62,746Training reactions7,700Pipeline stages3
 
-Problem Statement
+#### Problem Statement
 The transition state (TS) is the highest-energy saddle point along a reaction pathway — the fleeting atomic configuration reactants must pass through to become products. Locating it is essential for computing activation energies and understanding reaction mechanisms, but traditional quantum methods (DFT, NEB) take hours per molecule.
 This project predicts TS 3D geometry from reactant + product structures in milliseconds — enabling high-throughput catalyst and drug design.
 The challenge: predictions must be rotation- and translation-invariant (standard NNs fail here without explicit constraints), and must beat the midpoint baseline x₀ = 0.5 × (xR + xP) to demonstrate real ML value.
 
-Datasets
+#### Datasets
 Transition1x
 
 7,700 training / 1,650 val / 1,650 test reactions
 Features: atomic positions, charges, forces, energies, TS guess variants
 
-Halo8 (Bonus)
+#### Halo8 (Bonus)
 
 Halogen-abstraction (SN2-like) reactions
 Slightly different atom types — tests model transferability across reaction classes
@@ -27,7 +27,8 @@ Slightly different atom types — tests model transferability across reaction cl
 Combined training set: Halo8 + Transition1x (7,700 reactions total)
 Evaluation metric: Δ = RMSD(midpoint, TS) − RMSD(model, TS) · Mean RMSD (lower is better) · % reactions improved vs midpoint
 
-Pipeline Architecture
+### Pipeline Architecture
+
 INPUT: Reactant + Product positions (3D), atom types, charges, forces
          │
          ▼
@@ -53,7 +54,9 @@ INPUT: Reactant + Product positions (3D), atom types, charges, forces
          │
          ▼
 OUTPUT: Predicted TS geometry (.xyz)
-Stage 1 — EGNN (Initial TS Guess)
+
+
+#### Stage 1 — EGNN (Initial TS Guess)
 An E(n)-Equivariant Graph Neural Network operates on the combined reactant + product molecular graph. Equivariance guarantees physically valid predictions under any rotation or translation.
 Node features (25D):
 
@@ -63,11 +66,11 @@ Atom one-hot encoding (8D)
 Normalized charge
 Reactant AND product force vectors
 
-Key innovation: Initialize atom positions from the midpoint x₀ = 0.5 × (xR + xP) — a physically meaningful starting geometry that accelerates convergence vs random initialization.
+#### Key innovation: Initialize atom positions from the midpoint x₀ = 0.5 × (xR + xP) — a physically meaningful starting geometry that accelerates convergence vs random initialization.
 Stage 2 — Flow Matching (Geometry Refinement)
 A continuous normalizing flow learns the velocity field vθ(xt, t | xR, xP).
 
-Trajectory: x₀ = midpoint → xTS over 20 ODE integration steps
+#### Trajectory: x₀ = midpoint → xTS over 20 ODE integration steps
 Loss: E||vθ − (xTS − x₀)||²
 The flow learns the residual correction from midpoint toward the true TS
 Flow Matching validation loss stayed stable (~0.062) across all training versions
